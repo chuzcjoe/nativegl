@@ -19,7 +19,6 @@ public:
     ~GLRender();
     void cal_pixel();
 
-    //实现OpenGL渲染上下文的回调函数
     virtual void surfaceCreate() override;
     virtual void surfaceChange(int width, int height) override;
     virtual void drawFrame() override;
