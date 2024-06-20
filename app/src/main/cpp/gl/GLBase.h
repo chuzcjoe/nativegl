@@ -19,11 +19,10 @@
 
 struct EGLSetting {
     enum class RenderThreadMessage {
-        MSG_NONE = 0,
+        MSG_DRAW = 0,
         MSG_WINDOW_SET,
         MSG_RENDER_LOOP_EXIT
     };
-    pthread_t _threadId;
     std::mutex _mutex;
     RenderThreadMessage _msg;
 
@@ -36,6 +35,10 @@ struct EGLSetting {
 
     int _width;
     int _height;
+
+    void postMsg(RenderThreadMessage msg) {
+        _msg = msg;
+    }
 };
 
 class GLBase {

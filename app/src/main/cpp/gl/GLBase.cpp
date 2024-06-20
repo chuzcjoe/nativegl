@@ -75,7 +75,7 @@ void GLBase::setWindow(JNIEnv *env, jobject surface) {
     if (surface != nullptr) {
         eglSetting._window  = ANativeWindow_fromSurface(env, surface);
         std::lock_guard<std::mutex> lock(eglSetting._mutex);
-        eglSetting._msg = EGLSetting::RenderThreadMessage::MSG_WINDOW_SET;
+        eglSetting.postMsg(EGLSetting::RenderThreadMessage::MSG_WINDOW_SET);
     } else {
         ANativeWindow_release(eglSetting._window);
     }
@@ -153,7 +153,6 @@ bool GLBase::initEGL() {
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 
-    surfaceCreate();
     surfaceChange(eglSetting._width, eglSetting._height);
     window_set = true;
     return true;
@@ -193,15 +192,16 @@ void GLBase::renderLoop(){
     bool rendering = true;
     while (rendering) {
         if (running){
-            // process incoming messages
+
             if (eglSetting._msg == EGLSetting::RenderThreadMessage::MSG_WINDOW_SET) {
                 initEGL();
+                surfaceCreate();
             }
             if (eglSetting._msg == EGLSetting::RenderThreadMessage::MSG_RENDER_LOOP_EXIT) {
                 rendering = false;
                 destroyRender();
             }
-            eglSetting._msg = EGLSetting::RenderThreadMessage::MSG_NONE;
+            eglSetting.postMsg(EGLSetting::RenderThreadMessage::MSG_DRAW);
 
             if (!window_set) {
                 usleep(16000);
@@ -212,7 +212,7 @@ void GLBase::renderLoop(){
                 std::lock_guard<std::mutex> lock(eglSetting._mutex);
                 drawFrame();
                 if (!eglSwapBuffers(eglSetting._display, eglSetting._surface)) {
-                    LOG_INFO("GLrenderS::eglSwapBuffers() returned error %d", eglGetError());
+                    LOG_INFO("eglSwapBuffers() returned error %d", eglGetError());
                 }
             } else {
                 usleep(16000);

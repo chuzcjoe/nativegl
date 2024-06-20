@@ -5,12 +5,8 @@
 #include "GLRender.h"
 #include "GLShaderSource.h"
 
-GLRender::GLRender(){
-
-}
-GLRender::~GLRender(){
-
-}
+GLRender::GLRender() {}
+GLRender::~GLRender() {}
 
 void GLRender::cal_pixel() {
     vertices[0] = -0.5f; vertices[1] = -0.5f; vertices[2] = 0.0f;  // Left
@@ -20,9 +16,7 @@ void GLRender::cal_pixel() {
 
 void GLRender::surfaceCreate() {
     tProgram = createProgram(vertexShader, fragmentShader);
-
     aPositionLocation  = glGetAttribLocation(tProgram, "a_Position");
-    glClearColor(0.0,0.0,0.0,1.0f);
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -38,10 +32,11 @@ void GLRender::surfaceChange(int width, int height) {
 }
 
 
-void GLRender::drawFrame(){
+void GLRender::drawFrame() {
+    glClearColor(1., 1., 1., 1.); // White background
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glUseProgram(tProgram); //使用texture的program
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);    //显示纹理
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   //用完buffer以后解绑定
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
