@@ -20,8 +20,8 @@ public:
     void cal_pixel();
 
     //实现OpenGL渲染上下文的回调函数
-    virtual void SurfaceCreate();
-    virtual void SurfaceChange(int width, int height);
-    virtual void DrawFrame();
+    virtual void surfaceCreate();
+    virtual void surfaceChange(int width, int height);
+    virtual void drawFrame();
 };
 

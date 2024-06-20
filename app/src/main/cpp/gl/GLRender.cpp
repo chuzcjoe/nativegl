@@ -18,7 +18,7 @@ void GLRender::cal_pixel() {
     vertices[6] = 0.0f; vertices[7] = 0.5f; vertices[8] = 0.0f;  // Top
 }
 
-void GLRender::SurfaceCreate() {
+void GLRender::surfaceCreate() {
     tProgram = createProgram(vertexShader, fragmentShader);
 
     aPositionLocation  = glGetAttribLocation(tProgram, "a_Position");
@@ -33,12 +33,12 @@ void GLRender::SurfaceCreate() {
     glEnableVertexAttribArray(aPositionLocation);
 }
 
-void GLRender::SurfaceChange(int width, int height) {
+void GLRender::surfaceChange(int width, int height) {
     glViewport(0, 0, width, height);
 }
 
 
-void GLRender::DrawFrame(){
+void GLRender::drawFrame(){
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glUseProgram(tProgram); //使用texture的program
     glBindVertexArray(VAO);

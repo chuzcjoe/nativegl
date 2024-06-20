@@ -13,7 +13,7 @@ GLBase::~GLBase() {
     if (_th.joinable()) {
         _th.join();
     }
-    DestroyRender();
+    destroyRender();
     running = 0;
     init = 0;
 }
@@ -70,7 +70,7 @@ int GLBase::createProgram(const char* pVertexSource, const char* pFragmentSource
     return program;
 }
 
-void GLBase::SetWindow(JNIEnv *env, jobject surface) {
+void GLBase::setWindow(JNIEnv *env, jobject surface) {
     // notify render thread that window has changed
     if (surface != nullptr) {
         eglSetting._window  = ANativeWindow_fromSurface(env, surface);
@@ -153,13 +153,13 @@ bool GLBase::initEGL() {
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 
-    SurfaceCreate();
-    SurfaceChange(eglSetting._width,eglSetting._height);
+    surfaceCreate();
+    surfaceChange(eglSetting._width, eglSetting._height);
     window_set = true;
     return true;
 }
 
-void GLBase::DestroyRender() {
+void GLBase::destroyRender() {
 
     eglMakeCurrent(eglSetting._display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     eglDestroyContext(eglSetting._display, eglSetting._context);
@@ -173,23 +173,23 @@ void GLBase::DestroyRender() {
     return;
 }
 
-void GLBase::StartRenderThread(){
+void GLBase::startRenderThread(){
     if (!init){
-        _th = std::thread(RenderThread, this);
+        _th = std::thread(renderThread, this);
         init = !init;
     }
     running = true;
 }
-void GLBase::StopRenderThread() {
+void GLBase::stopRenderThread() {
     running = false;
     return;
 }
 
-void GLBase::RenderThread(GLBase* obj){
-    obj->RenderLoop();
+void GLBase::renderThread(GLBase* obj){
+    obj->renderLoop();
 }
 
-void GLBase::RenderLoop(){
+void GLBase::renderLoop(){
     bool rendering = true;
     while (rendering) {
         if (running){
@@ -199,7 +199,7 @@ void GLBase::RenderLoop(){
             }
             if (eglSetting._msg == EGLSetting::RenderThreadMessage::MSG_RENDER_LOOP_EXIT) {
                 rendering = false;
-                DestroyRender();
+                destroyRender();
             }
             eglSetting._msg = EGLSetting::RenderThreadMessage::MSG_NONE;
 
@@ -210,7 +210,7 @@ void GLBase::RenderLoop(){
 
             if (eglSetting._display) {
                 std::lock_guard<std::mutex> lock(eglSetting._mutex);
-                DrawFrame();
+                drawFrame();
                 if (!eglSwapBuffers(eglSetting._display, eglSetting._surface)) {
                     LOG_INFO("GLrenderS::eglSwapBuffers() returned error %d", eglGetError());
                 }

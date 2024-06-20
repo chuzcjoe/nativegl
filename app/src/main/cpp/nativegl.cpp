@@ -13,17 +13,17 @@ Java_com_example_nativegl_JNIProxy_calPixel(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_nativegl_JNIProxy_startRender(JNIEnv *env, jobject thiz) {
-    renderer->StartRenderThread();
+    renderer->startRenderThread();
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_nativegl_JNIProxy_stopRender(JNIEnv *env, jobject thiz) {
-    renderer->StopRenderThread();
+    renderer->stopRenderThread();
 }
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_nativegl_JNIProxy_setSurface(JNIEnv *env, jobject thiz, jobject surface) {
-    renderer->SetWindow(env, surface);
+    renderer->setWindow(env, surface);
 }
