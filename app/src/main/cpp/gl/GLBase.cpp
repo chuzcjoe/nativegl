@@ -210,7 +210,6 @@ void GLBase::renderLoop(){
 
             if (eglSetting._display) {
                 std::lock_guard<std::mutex> lock(eglSetting._mutex);
-                LOG_INFO("Drawing Frame");
                 drawFrame();
                 if (!eglSwapBuffers(eglSetting._display, eglSetting._surface)) {
                     LOG_INFO("eglSwapBuffers() returned error %d", eglGetError());

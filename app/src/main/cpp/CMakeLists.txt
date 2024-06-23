@@ -9,7 +9,10 @@ set(CPP_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 # include directories
 include_directories("${CPP_ROOT}/gl"
                     "${CPP_ROOT}/shader"
-                    "${CPP_ROOT}/utils")
+                    "${CPP_ROOT}/utils"
+                    "${CPP_ROOT}/jpeg/include")
+
+set(JPEG_LIB "${CPP_ROOT}/jpeg/lib/libturbojpeg.a")
 
 add_library( # Sets the name of the library.
              nativegl
@@ -31,4 +34,5 @@ target_link_libraries( # Specifies the target library.
                        EGL
                        GLESv3
                        android
-                       log)
+                       log
+                       ${JPEG_LIB})

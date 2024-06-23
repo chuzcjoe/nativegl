@@ -9,16 +9,19 @@
 
 const char* vertexShader = VERTEX_SHADER(
         attribute vec3 a_Position;
+        attribute vec2 a_Texture;
+        varying vec2 TexCoord;
         void main() {
            gl_Position = vec4(a_Position, 1.0);
+           TexCoord = a_Texture;
         }
 );
 
 const char* fragmentShader = FRAGMENT_SHADER(
         precision mediump float;
-        vec4 color_temp;
+        varying vec2 TexCoord;
+        uniform sampler2D texture_load;
         void main() {
-           color_temp = vec4(0, 1, 0, 1);
-           gl_FragColor = color_temp;
+           gl_FragColor = texture2D(texture_load, TexCoord);
         }
 );
