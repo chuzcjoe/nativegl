@@ -11,8 +11,10 @@ private:
     unsigned int aPositionLocation ;
     unsigned int VAO;
     unsigned int VBO;
+    unsigned int EBO;
 
-    float vertices[9];
+    float vertices[12];
+    unsigned int indices[6];
 
 public:
     GLRender();

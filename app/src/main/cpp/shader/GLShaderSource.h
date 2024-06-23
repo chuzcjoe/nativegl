@@ -8,9 +8,9 @@
 #define FRAGMENT_SHADER(...)  #__VA_ARGS__
 
 const char* vertexShader = VERTEX_SHADER(
-        attribute vec2 a_Position;  //屏幕坐标
+        attribute vec3 a_Position;
         void main() {
-           gl_Position = vec4(a_Position,0,1.0);
+           gl_Position = vec4(a_Position, 1.0);
         }
 );
 
@@ -19,6 +19,6 @@ const char* fragmentShader = FRAGMENT_SHADER(
         vec4 color_temp;
         void main() {
            color_temp = vec4(0, 1, 0, 1);
-           gl_FragColor=color_temp;
+           gl_FragColor = color_temp;
         }
 );
