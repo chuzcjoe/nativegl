@@ -4,6 +4,7 @@
 
 #pragma once
 #include "GLBase.h"
+#include "SDRImage.h"
 #include "turbojpeg.h"
 #include "log.h"
 #include <iostream>
@@ -20,9 +21,13 @@ private:
     unsigned int VBO;
     unsigned int EBO;
     unsigned int _texture;
+    SDRImage sdrImage;
+    const char* files[2] = {"/data/local/tmp/imgs/img1.jpg", "/data/local/tmp/imgs/img2.jpg"};
+    int image_idx = 1;
 
     float vertices[20];
     unsigned int indices[6];
+
 
     unsigned char* loadJPEG(const char* path, int& width, int& height);
 

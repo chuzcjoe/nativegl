@@ -23,6 +23,8 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              ${CPP_ROOT}/gl/GLBase.cpp
              ${CPP_ROOT}/gl/GLRender.cpp
+             ${CPP_ROOT}/utils/ImageBase.cpp
+             ${CPP_ROOT}/utils/SDRImage.cpp
              nativegl.cpp
             )
 

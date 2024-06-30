@@ -5,7 +5,10 @@
 #include "GLRender.h"
 #include "GLShaderSource.h"
 
-GLRender::GLRender() {}
+GLRender::GLRender() {
+    sdrImage = SDRImage(files[image_idx]);
+}
+
 GLRender::~GLRender() {}
 
 void GLRender::cal_pixel() {
@@ -21,58 +24,6 @@ void GLRender::cal_pixel() {
     indices[3] = 2;
     indices[4] = 3;
     indices[5] = 0;
-}
-
-unsigned char *GLRender::loadJPEG(const char *filename, int &width, int &height) {
-    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    if (!file.is_open()) {
-        std::cerr << "Error: Cannot open file " << filename << std::endl;
-        return nullptr;
-    }
-
-    std::streamsize fileSize = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    std::vector<unsigned char> buffer(fileSize);
-    if (!file.read(reinterpret_cast<char*>(buffer.data()), fileSize)) {
-        std::cerr << "Error: Cannot read file " << filename << std::endl;
-        return nullptr;
-    }
-
-    tjhandle tjInstance = tjInitDecompress();
-    if (tjInstance == nullptr) {
-        std::cerr << "Error: tjInitDecompress failed" << std::endl;
-        return nullptr;
-    }
-
-    int jpegSubsamp, jpegColorspace;
-    if (tjDecompressHeader3(tjInstance, buffer.data(), buffer.size(), &width, &height, &jpegSubsamp, &jpegColorspace) != 0) {
-        std::cerr << "Error: tjDecompressHeader3 failed: " << tjGetErrorStr() << std::endl;
-        tjDestroy(tjInstance);
-        return nullptr;
-    }
-
-    std::vector<unsigned char> imageBuffer(width * height * tjPixelSize[TJPF_RGB]);
-    if (tjDecompress2(tjInstance, buffer.data(), buffer.size(), imageBuffer.data(), width, 0, height, TJPF_RGB, 0) != 0) {
-        std::cerr << "Error: tjDecompress2 failed: " << tjGetErrorStr() << std::endl;
-        tjDestroy(tjInstance);
-        return nullptr;
-    }
-
-    // Flip the image vertically
-    unsigned char *flippedImage = new unsigned char[width * height * tjPixelSize[TJPF_RGB]];
-    int rowSize = width * tjPixelSize[TJPF_RGB];
-
-    for (int y = 0; y < height; ++y) {
-        std::copy(
-                imageBuffer.begin() + (height - 1 - y) * rowSize,
-                imageBuffer.begin() + (height - y) * rowSize,
-                flippedImage + y * rowSize
-        );
-    }
-
-    tjDestroy(tjInstance);
-    return flippedImage;
 }
 
 void GLRender::surfaceCreate() {
@@ -93,7 +44,10 @@ void GLRender::surfaceCreate() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    auto data = loadJPEG("/data/local/tmp/jpeg_demo/hdr.jpg", width, height);
+    sdrImage.loadJPEG();
+    auto data = sdrImage.data();
+    width = sdrImage.getWidth();
+    height = sdrImage.getHeight();
 
     if (data) {
         // generate texture
