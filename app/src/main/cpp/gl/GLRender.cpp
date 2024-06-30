@@ -52,6 +52,7 @@ void GLRender::updateTexture() {
     } else {
         LOG_ERROR("Failed to load new image");
     }
+    delete data;
 }
 
 void GLRender::surfaceCreate() {
@@ -86,6 +87,7 @@ void GLRender::surfaceCreate() {
     } else {
         LOG_ERROR("load texture error");
     }
+    delete data;
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);

@@ -19,7 +19,3 @@ int ImageBase::getWidth() {
 int ImageBase::getHeight() {
     return _height;
 }
-
-void ImageBase::setFilepath(const char *file) {
-    _file = file;
-}

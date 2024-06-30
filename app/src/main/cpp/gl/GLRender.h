@@ -26,10 +26,8 @@ private:
     SDRImage sdrImage;
     const char* files[IMAGE_NUM] = {"/data/local/tmp/imgs/img1.jpg", "/data/local/tmp/imgs/img2.jpg"};
     int image_idx = 1;
-
     float vertices[20];
     unsigned int indices[6];
-
 
     unsigned char* loadJPEG(const char* path, int& width, int& height);
 public:
