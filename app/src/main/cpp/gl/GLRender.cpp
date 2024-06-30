@@ -26,6 +26,34 @@ void GLRender::cal_pixel() {
     indices[5] = 0;
 }
 
+void GLRender::updateTexture() {
+    LOG_INFO("nextImage");
+    // Update image index
+    image_idx = (image_idx + 1) % IMAGE_NUM;
+
+    // Load new image
+    sdrImage = SDRImage(files[image_idx]);
+    sdrImage.loadJPEG();
+
+    // Get new image data
+    auto data = sdrImage.data();
+    int width = sdrImage.getWidth();
+    int height = sdrImage.getHeight();
+
+    if (data) {
+        // Bind the existing texture
+        glBindTexture(GL_TEXTURE_2D, _texture);
+
+        // Update the texture with new image data
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        LOG_INFO("Updated texture with new image, width: %d, height: %d\n", width, height);
+    } else {
+        LOG_ERROR("Failed to load new image");
+    }
+}
+
 void GLRender::surfaceCreate() {
     tProgram = createProgram(vertexShader, fragmentShader);
     aPositionLocation  = glGetAttribLocation(tProgram, "a_Position");

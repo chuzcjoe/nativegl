@@ -14,4 +14,5 @@ object JNIProxy {
     external fun startRender()
     external fun stopRender()
     external fun setSurface(surface: Surface?)
+    external fun nextImage();
 }

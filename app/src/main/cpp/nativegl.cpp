@@ -27,3 +27,9 @@ JNIEXPORT void JNICALL
 Java_com_example_nativegl_JNIProxy_setSurface(JNIEnv *env, jobject thiz, jobject surface) {
     renderer->setWindow(env, surface);
 }
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_nativegl_JNIProxy_nextImage(JNIEnv *env, jobject thiz) {
+    renderer->notifyTextureUpdate();
+}

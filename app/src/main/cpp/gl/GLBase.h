@@ -9,6 +9,7 @@
 #include <mutex>
 #include <cstdlib>
 #include <math.h>
+#include <queue>
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 #include <unistd.h>
@@ -41,6 +42,10 @@ struct EGLSetting {
     }
 };
 
+struct TextureUpdateInfo {
+    std::string textureName;
+};
+
 class GLBase {
 private:
     EGLSetting eglSetting;
@@ -49,6 +54,7 @@ private:
     bool init{false};
     bool running{false};
     bool window_set{false};
+    std::queue<TextureUpdateInfo> textureUpdateQueue;
 public:
     GLBase();
     ~GLBase();
@@ -58,6 +64,7 @@ public:
     void destroyRender();
     static void renderThread(GLBase* obj);
     void renderLoop();
+    void notifyTextureUpdate();
 
     virtual void setWindow(JNIEnv *env, jobject surface);
     virtual void startRenderThread();
@@ -66,4 +73,5 @@ public:
     virtual void surfaceCreate() = 0;
     virtual void surfaceChange(int width, int height) = 0;
     virtual void drawFrame() = 0;
+    virtual void updateTexture() = 0;
 };

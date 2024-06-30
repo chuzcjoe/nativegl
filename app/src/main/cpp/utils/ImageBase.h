@@ -16,6 +16,7 @@ public:
     unsigned char* data();
     int getWidth();
     int getHeight();
+    void setFilepath(const char* file);
 
 protected:
     int _width;

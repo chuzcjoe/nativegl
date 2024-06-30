@@ -191,8 +191,7 @@ void GLBase::renderThread(GLBase* obj){
 void GLBase::renderLoop(){
     bool rendering = true;
     while (rendering) {
-        if (running){
-
+        if (running) {
             if (eglSetting._msg == EGLSetting::RenderThreadMessage::MSG_WINDOW_SET) {
                 initEGL();
                 surfaceCreate();
@@ -207,7 +206,11 @@ void GLBase::renderLoop(){
                 usleep(16000);
                 continue;
             }
-
+            if (!textureUpdateQueue.empty()) {
+                LOG_INFO("updateTexture");
+                updateTexture();
+                textureUpdateQueue.pop();
+            }
             if (eglSetting._display) {
                 std::lock_guard<std::mutex> lock(eglSetting._mutex);
                 drawFrame();
@@ -221,4 +224,8 @@ void GLBase::renderLoop(){
             usleep(16000);
         }
     }
+}
+
+void GLBase::notifyTextureUpdate() {
+    textureUpdateQueue.push({"new texture"});
 }
