@@ -2,6 +2,7 @@ package com.example.nativegl
 
 import android.os.Bundle
 import android.view.SurfaceView
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.nativegl.databinding.ActivityMainBinding
@@ -22,6 +23,16 @@ class MainActivity : AppCompatActivity() {
         surfaceView?.holder?.addCallback(surfaceHolder)
 
         onNextClick()
+        onHDRClick()
+    }
+
+    private fun onHDRClick() {
+        mainBinding.btHDR.setOnClickListener{
+            if ((it as Button).text == "SDR")
+                (it as Button).text = "HDR"
+            else
+                (it as Button).text = "SDR"
+        }
     }
 
     private fun onNextClick() {
