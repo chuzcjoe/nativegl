@@ -33,3 +33,9 @@ JNIEXPORT void JNICALL
 Java_com_example_nativegl_JNIProxy_nextImage(JNIEnv *env, jobject thiz) {
     renderer->notifyTextureUpdate();
 }
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_nativegl_JNIProxy_setColorMode(JNIEnv *env, jobject thiz, jboolean is_hdr) {
+
+}

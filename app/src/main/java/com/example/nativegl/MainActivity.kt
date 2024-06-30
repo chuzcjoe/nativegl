@@ -1,7 +1,13 @@
 package com.example.nativegl
 
+import android.content.Context
+import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
+import android.view.Display
 import android.view.SurfaceView
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,14 +30,26 @@ class MainActivity : AppCompatActivity() {
 
         onNextClick()
         onHDRClick()
+
+        checkHDRCapability()
     }
 
     private fun onHDRClick() {
         mainBinding.btHDR.setOnClickListener{
-            if ((it as Button).text == "SDR")
+            if ((it as Button).text == "SDR") {
                 (it as Button).text = "HDR"
-            else
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    window.colorMode = ActivityInfo.COLOR_MODE_HDR
+                }
+                JNIProxy.setColorMode(true)
+            }
+            else {
                 (it as Button).text = "SDR"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    window.colorMode = ActivityInfo.COLOR_MODE_DEFAULT
+                }
+                JNIProxy.setColorMode(false)
+            }
         }
     }
 
@@ -39,6 +57,20 @@ class MainActivity : AppCompatActivity() {
         mainBinding.btNext.setOnClickListener{
             Toast.makeText(this, "next image", Toast.LENGTH_SHORT).show()
             JNIProxy.nextImage()
+        }
+    }
+
+    private fun checkHDRCapability() {
+        // Getting the default display
+        val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+
+        // Checking HDR capabilities
+        val hdrCapabilities = display.hdrCapabilities
+        if (hdrCapabilities != null &&
+            hdrCapabilities.supportedHdrTypes.contains(Display.HdrCapabilities.HDR_TYPE_HDR10)) {
+            Toast.makeText(this, "display supports HDR", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "display does not support HDR", Toast.LENGTH_SHORT).show()
         }
     }
 
