@@ -105,7 +105,7 @@ bool GLBase::initEGL() {
             EGL_ALPHA_SIZE, 8,
             EGL_DEPTH_SIZE, 8,
             EGL_STENCIL_SIZE, 8,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
             EGL_NONE
     };
 

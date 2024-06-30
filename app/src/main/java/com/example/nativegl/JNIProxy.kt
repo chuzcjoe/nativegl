@@ -15,6 +15,5 @@ object JNIProxy {
     external fun stopRender()
     external fun setSurface(surface: Surface?)
     external fun nextImage();
-
     external fun setColorMode(isHDR : Boolean);
 }

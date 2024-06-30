@@ -57,8 +57,6 @@ void GLRender::updateTexture() {
 
 void GLRender::surfaceCreate() {
     tProgram = createProgram(vertexShader, fragmentShader);
-    aPositionLocation  = glGetAttribLocation(tProgram, "a_Position");
-    aTexturePosition = glGetAttribLocation(tProgram, "a_Texture");
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -95,11 +93,11 @@ void GLRender::surfaceCreate() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(aPositionLocation, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(aPositionLocation);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(aTexturePosition, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(aTexturePosition);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glUseProgram(tProgram);
     glUniform1i(glGetUniformLocation(tProgram, "texture_load"), 0);
