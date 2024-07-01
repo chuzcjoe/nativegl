@@ -26,8 +26,6 @@ private:
     int image_idx = 1;
     float vertices[20];
     unsigned int indices[6];
-
-    unsigned char* loadJPEG(const char* path, int& width, int& height);
 public:
     GLRender();
     ~GLRender();
