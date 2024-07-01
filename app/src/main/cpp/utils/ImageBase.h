@@ -4,11 +4,14 @@
 
 #pragma once
 
+#include "log.h"
 
 class ImageBase {
 public:
-    ImageBase();
+    ImageBase() = default;
     ImageBase(const char* file);
+
+    virtual ~ImageBase();
 
     // Derived classes should decode jpeg in different ways
     virtual void loadJPEG() = 0;

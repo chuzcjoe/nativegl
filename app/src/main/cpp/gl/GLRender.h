@@ -21,7 +21,7 @@ private:
     unsigned int VBO;
     unsigned int EBO;
     unsigned int _texture;
-    SDRImage sdrImage;
+    SDRImage* sdrImage = nullptr;
     const char* files[IMAGE_NUM] = {"/data/local/tmp/imgs/img1.jpg", "/data/local/tmp/imgs/img2.jpg", "/data/local/tmp/imgs/img3.jpg"};
     int image_idx = 1;
     float vertices[20];

@@ -6,10 +6,16 @@
 #include "GLShaderSource.h"
 
 GLRender::GLRender() {
-    sdrImage = SDRImage(files[image_idx]);
+    sdrImage = new SDRImage(files[image_idx]);
 }
 
-GLRender::~GLRender() {}
+GLRender::~GLRender() {
+    if (sdrImage) {
+        delete sdrImage;
+        sdrImage = nullptr;
+    }
+
+}
 
 void GLRender::cal_pixel() {
     vertices[0] = -1.0f; vertices[1] = -1.0f; vertices[2] = 0.0f; vertices[3] = 0.0f; vertices[4] = 0.0f;  // Bottom left
@@ -31,14 +37,18 @@ void GLRender::updateTexture() {
     // Update image index
     image_idx = (image_idx + 1) % IMAGE_NUM;
 
+    if (sdrImage) {
+        delete sdrImage;
+        sdrImage = nullptr;
+    }
     // Load new image
-    sdrImage = SDRImage(files[image_idx]);
-    sdrImage.loadJPEG();
+    sdrImage = new SDRImage(files[image_idx]);
+    sdrImage->loadJPEG();
 
     // Get new image data
-    auto data = sdrImage.data();
-    int width = sdrImage.getWidth();
-    int height = sdrImage.getHeight();
+    auto data = sdrImage->data();
+    int width = sdrImage->getWidth();
+    int height = sdrImage->getHeight();
 
     if (data) {
         // Bind the existing texture
@@ -52,7 +62,6 @@ void GLRender::updateTexture() {
     } else {
         LOG_ERROR("Failed to load new image");
     }
-    delete data;
 }
 
 void GLRender::surfaceCreate() {
@@ -71,10 +80,10 @@ void GLRender::surfaceCreate() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    sdrImage.loadJPEG();
-    auto data = sdrImage.data();
-    width = sdrImage.getWidth();
-    height = sdrImage.getHeight();
+    sdrImage->loadJPEG();
+    auto data = sdrImage->data();
+    width = sdrImage->getWidth();
+    height = sdrImage->getHeight();
 
     if (data) {
         // generate texture
@@ -85,7 +94,6 @@ void GLRender::surfaceCreate() {
     } else {
         LOG_ERROR("load texture error");
     }
-    delete data;
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);

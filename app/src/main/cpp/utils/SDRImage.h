@@ -15,10 +15,12 @@
 
 
 
-class SDRImage : public ImageBase{
+class SDRImage : public ImageBase {
 public:
-    SDRImage();
+    SDRImage() = default;
     SDRImage(const char* filename);
+
+    ~SDRImage() override;
 
     void loadJPEG() override;
 };

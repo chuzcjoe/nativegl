@@ -4,9 +4,12 @@
 
 #include "SDRImage.h"
 
-SDRImage::SDRImage() : ImageBase() {}
-
 SDRImage::SDRImage(const char *filename) : ImageBase(filename) {}
+
+SDRImage::~SDRImage() {
+    delete[] _data;
+    LOG_INFO("released data");
+}
 
 void SDRImage::loadJPEG() {
     const char* filename = _file;

@@ -4,9 +4,9 @@
 
 #include "ImageBase.h"
 
-ImageBase::ImageBase() {}
-
 ImageBase::ImageBase(const char *file) : _file(file) {}
+
+ImageBase::~ImageBase() {}
 
 unsigned char *ImageBase::data() {
     return _data;
